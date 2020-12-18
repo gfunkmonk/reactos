@@ -8,7 +8,7 @@ list(APPEND HAL_PIC_SOURCE
     generic/clock.c
     generic/profil.c
     generic/timer.c
-    up/halinit_up.c
+    up/halinit.c
     up/irql.c
     up/pic.c)
 

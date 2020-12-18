@@ -27,7 +27,7 @@ list(APPEND HAL_PC98_ASM_SOURCE
 list(APPEND HAL_PC98_SOURCE
     pc98/irql.c
     generic/timer.c
-    up/halinit_up.c
+    up/halinit.c
     up/pic.c)
 
 list(APPEND HAL_PC98_ASM_SOURCE
