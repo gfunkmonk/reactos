@@ -31,6 +31,7 @@ HALP_MP_INFO_TABLE HalpMpInfoTable;
 PLOCAL_APIC HalpProcLocalApicTable = NULL;
 UCHAR HalpIntDestMap[MAX_CPUS] = {0};
 UCHAR HalpMaxProcsPerCluster = 0;
+UCHAR HalpInitLevel = 0xFF;
 BOOLEAN HalpForceApicPhysicalDestinationMode = FALSE;
 
 /* FUNCTIONS ****************************************************************/
@@ -125,8 +126,23 @@ VOID
 NTAPI
 HalpBuildIpiDestinationMap(ULONG ProcessorNumber)
 {
-    // FIXME UNIMPLIMENTED;
-    ASSERT(FALSE);
+    if (HalpInitLevel == 0xFF)
+    {
+        return;
+    }
+
+    if (HalpForceApicPhysicalDestinationMode)
+    {
+        DPRINT1("HalpBuildIpiDestinationMap: [%X] FIXME\n", HalpInitLevel);
+    }
+    else if (HalpMaxProcsPerCluster)
+    {
+        DPRINT1("HalpBuildIpiDestinationMap: [%X] FIXME\n", HalpInitLevel);
+    }
+    else
+    {
+        DPRINT1("HalpBuildIpiDestinationMap: [%X] FIXME\n", HalpInitLevel);
+    }
 }
 
 VOID
