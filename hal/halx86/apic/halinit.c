@@ -30,6 +30,7 @@ PKPCR HalpProcessorPCR[MAX_CPUS];
 HALP_MP_INFO_TABLE HalpMpInfoTable;
 PLOCAL_APIC HalpProcLocalApicTable = NULL;
 UCHAR HalpMaxProcsPerCluster = 0;
+BOOLEAN HalpForceApicPhysicalDestinationMode = FALSE;
 
 /* FUNCTIONS ****************************************************************/
 
@@ -59,8 +60,16 @@ UCHAR
 NTAPI
 HalpMapNtToHwProcessorId(UCHAR Number)
 {
-    // FIXME UNIMPLIMENTED;
-    ASSERT(FALSE);
+    ASSERT(HalpForceApicPhysicalDestinationMode == FALSE);
+
+    if (!HalpMaxProcsPerCluster)
+    {
+        ASSERT(Number < 8);
+        return (1 << Number);
+    }
+
+    // FIXME
+    DbgBreakPoint();
     return 0;
 }
 
