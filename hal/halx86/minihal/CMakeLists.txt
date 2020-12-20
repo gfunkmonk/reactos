@@ -17,7 +17,7 @@ list(APPEND MINI_HAL_SOURCE
     ../generic/sysinfo.c
     ../generic/timer.c
     ../generic/usage.c
-    ../pic/halinit_mini.c
+    ../minihal/halinit.c
     ../pic/pic.c
     ../pic/processor.c
     ../include/hal.h)
