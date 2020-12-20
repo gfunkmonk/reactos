@@ -66,7 +66,6 @@ include(apic.cmake)
 if(ARCH STREQUAL "i386")
     include(pcidata.cmake)
     include(legacy.cmake)
-    include(up.cmake)
     include(hal.cmake)
     include(halapic.cmake)
     include(halmps.cmake)
@@ -90,8 +89,8 @@ if(ARCH STREQUAL "i386")
     add_hal(halaacpi SOURCES acpi/halaacpi.rc COMPONENTS generic acpi halaacpi)
     add_hal(halmacpi SOURCES acpi/halmacpi.rc COMPONENTS generic acpi halmacpi)
 
-    add_hal(halxbox SOURCES xbox/halxbox.rc COMPONENTS xbox up)
-    add_hal(halpc98 SOURCES pc98/halpc98.rc COMPONENTS pc98 up)
+    add_hal(halxbox SOURCES xbox/halxbox.rc COMPONENTS xbox)
+    add_hal(halpc98 SOURCES pc98/halpc98.rc COMPONENTS pc98)
 
 elseif(ARCH STREQUAL "amd64")
 

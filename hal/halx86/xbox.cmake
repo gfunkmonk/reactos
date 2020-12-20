@@ -3,7 +3,7 @@ list(APPEND HAL_XBOX_ASM_SOURCE
     generic/systimer.S
     generic/trap.S
     generic/v86.S
-    up/pic.S)
+    pic/pic.S)
 
 list(APPEND HAL_XBOX_SOURCE
     generic/beep.c
@@ -31,13 +31,15 @@ list(APPEND HAL_XBOX_SOURCE
     legacy/halpnpdd.c
     legacy/halpcat.c
     generic/profil.c
+    generic/spinlock.c
     generic/timer.c
+    pic/irql.c
+    pic/pic.c
+    pic/processor.c
     xbox/clock.c
     xbox/part_xbox.c
     xbox/halinit_xbox.c
-    xbox/reboot.c
-    up/irql.c
-    up/pic.c)
+    xbox/reboot.c)
 
 add_asm_files(lib_hal_xbox_asm ${HAL_XBOX_ASM_SOURCE})
 add_object_library(lib_hal_xbox ${HAL_XBOX_SOURCE} ${lib_hal_xbox_asm})
