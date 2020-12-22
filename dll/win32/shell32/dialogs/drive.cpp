@@ -64,7 +64,8 @@ GetDefaultClusterSize(LPWSTR szFs, PDWORD pClusterSize, PULARGE_INTEGER TotalNum
         else
             return FALSE;
     }
-    else if (!wcsicmp(szFs, L"FAT32"))
+    else if (!wcsicmp(szFs, L"FAT32") ||
+             !wcsicmp(szFs, L"FATX")) // See the FIXME comment below -- InsertDefaultClusterSizeForFs()
     {
         if (TotalNumberOfBytes->QuadPart <= (64 * 1024 * 1024))
             ClusterSize = 512;
@@ -230,11 +231,19 @@ InsertDefaultClusterSizeForFs(HWND hwndDlg, PFORMAT_DRIVE_CONTEXT pContext)
         SendMessageW(GetDlgItem(hwndDlg, 28675), BM_SETCHECK, BST_UNCHECKED, 0);
         EnableWindow(GetDlgItem(hwndDlg, 28675), FALSE);
     }
-    else if (!wcsicmp(wszBuf, L"FAT32"))
+    /*
+     * FIXME: Currently the filesystem driver doesn't differentiate between
+     * FATX16 and FATX32 hence it gets always treated as FATX. Since FATX
+     * supports cluster sizes similarly of FAT16 and FAT32 ones, determine
+     * if the FS is of FATX type here. When the FSD code properly discriminates
+     * between the two, this code must also differentiate between FATX16 and FATX32.
+     */
+    else if (!wcsicmp(wszBuf, L"FAT32") ||
+             !wcsicmp(wszBuf, L"FATX"))
     {
         if (!GetDefaultClusterSize(wszBuf, &ClusterSize, &TotalNumberOfBytes))
         {
-            TRACE("FAT32 is not supported on drive larger than 32G current %lu\n", TotalNumberOfBytes.QuadPart);
+            TRACE("FAT32 or FATX is not supported on drive larger than 32G current %lu\n", TotalNumberOfBytes.QuadPart);
             SendMessageW(hDlgCtrl, CB_DELETESTRING, iSelIndex, 0);
             return;
         }
