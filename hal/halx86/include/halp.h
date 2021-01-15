@@ -173,6 +173,7 @@ typedef struct
     UCHAR BusReleativeVector;
 } IDTUsage;
 
+#pragma pack(push, 1)
 typedef struct _HalAddressUsage
 {
     struct _HalAddressUsage *Next;
@@ -184,6 +185,7 @@ typedef struct _HalAddressUsage
         ULONG Length;
     } Element[];
 } ADDRESS_USAGE, *PADDRESS_USAGE;
+#pragma pack(pop)
 
 /* adapter.c */
 PADAPTER_OBJECT NTAPI HalpAllocateAdapterEx(ULONG NumberOfMapRegisters,BOOLEAN IsMaster, BOOLEAN Dma32BitAddresses);
@@ -313,6 +315,21 @@ NTAPI
 HalpUnmapVirtualAddress(
     IN PVOID VirtualAddress,
     IN PFN_COUNT NumberPages
+);
+
+PVOID
+NTAPI
+HalpMapPhysicalMemoryWriteThrough64(
+    _In_ PHYSICAL_ADDRESS PhysicalAddress,
+    _In_ PFN_COUNT PageCount
+);
+
+PVOID
+NTAPI
+HalpRemapVirtualAddress64(
+    _In_ PVOID VirtualAddress,
+    _In_ PHYSICAL_ADDRESS PhysicalAddress,
+    _In_ BOOLEAN IsWriteThrough
 );
 
 /* sysinfo.c */
@@ -514,6 +531,34 @@ HalpInitProcessor(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
 );
 
+CODE_SEG("INIT")
+VOID
+NTAPI
+HalpGetParameters(
+    IN PCHAR CommandLine
+);
+
+NTSTATUS
+NTAPI
+HalpAllocateMapRegisters(
+    _In_ PADAPTER_OBJECT AdapterObject,
+    _In_ ULONG Unknown,
+    _In_ ULONG Unknown2,
+    PMAP_REGISTER_ENTRY Registers
+);
+
+VOID
+NTAPI
+HaliLocateHiberRanges(
+    _In_ PVOID MemoryMap
+);
+
+VOID
+NTAPI
+HalpBuildIpiDestinationMap(
+    _In_ ULONG ProcessorNumber
+);
+
 #if defined(SARCH_PC98)
 BOOLEAN
 NTAPI
@@ -563,6 +608,7 @@ HalInitializeBios(
 extern BOOLEAN HalpNMIInProgress;
 
 extern ADDRESS_USAGE HalpDefaultIoSpace;
+extern ADDRESS_USAGE HalpEisaIoSpace;
 
 extern KSPIN_LOCK HalpSystemHardwareLock;
 

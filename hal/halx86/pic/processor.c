@@ -1,7 +1,7 @@
 /*
  * PROJECT:         ReactOS HAL
  * LICENSE:         GPL - See COPYING in the top level directory
- * FILE:            hal/halx86/up/processor.c
+ * FILE:            hal/halx86/pic/processor.c
  * PURPOSE:         HAL Processor Routines
  * PROGRAMMERS:     Alex Ionescu (alex.ionescu@reactos.org)
  */

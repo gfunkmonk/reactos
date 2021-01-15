@@ -2,6 +2,25 @@
 #pragma once
 
 #ifdef _M_AMD64
+  #define LOCAL_APIC_BASE  0xFFFFFFFFFFFE0000ULL // checkme!
+#else
+  #define LOCAL_APIC_BASE  0xFFFE0000
+#endif
+
+/* The IMCR is supported by two read/writable or write-only I/O ports,
+   22h and 23h, which receive address and data respectively.
+   To access the IMCR, write a value of 70h to I/O port 22h, which selects the IMCR.
+   Then write the data to I/O port 23h. The power-on default value is zero,
+   which connects the NMI and 8259 INTR lines directly to the BSP.
+   Writing a value of 01h forces the NMI and 8259 INTR signals to pass through the APIC.
+*/
+#define IMCR_ADDRESS_PORT  (PUCHAR)0x0022
+#define IMCR_DATA_PORT     (PUCHAR)0x0023
+#define IMCR_SELECT        0x70
+#define IMCR_PIC_DIRECT    0x00
+#define IMCR_PIC_VIA_APIC  0x01
+
+#ifdef _M_AMD64
 #define IOAPIC_BASE 0xFFFFFFFFFFFE1000ULL // checkme
 #define ZERO_VECTOR          0x00 // IRQL 00
 #define APC_VECTOR           0x3D // IRQL 01
@@ -32,6 +51,7 @@
 #define APIC_ERROR_VECTOR    0xE3
 #define POWERFAIL_VECTOR     0xEF // IRQL 30
 #define APIC_PROFILE_VECTOR  0xFD // IRQL 31
+#define APIC_PERF_VECTOR     0xFE
 #define APIC_NMI_VECTOR      0xFF
 #define IrqlToTpr(Irql) (HalpIRQLtoTPR[Irql])
 #define IrqlToSoftVector(Irql) IrqlToTpr(Irql)
@@ -283,4 +303,30 @@ NTAPI
 HalInitializeProfiling(VOID);
 
 VOID __cdecl ApicSpuriousService(VOID);
+VOID __cdecl PicSpuriousService37(VOID);
 
+BOOLEAN
+NTAPI 
+DetectMP(
+    _In_ PLOADER_PARAMETER_BLOCK LoaderBlock
+);
+
+VOID
+HalpInitPhase0a(
+    _In_ PLOADER_PARAMETER_BLOCK LoaderBlock
+);
+
+BOOLEAN
+NTAPI 
+HalpGetApicInterruptDesc(
+    _In_ ULONG DeviceIrq,
+    _In_ USHORT * OutIntI
+);
+
+VOID
+NTAPI
+HalpInitializeApicAddressing(
+    VOID
+);
+
+/* EOF */

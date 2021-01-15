@@ -18,6 +18,18 @@ BOOLEAN HalpPciLockSettings;
 
 /* PRIVATE FUNCTIONS *********************************************************/
 
+CODE_SEG("INIT")
+VOID
+NTAPI
+HalpGetParameters(IN PCHAR CommandLine)
+{
+    /* Check if PCI is locked */
+    if (strstr(CommandLine, "PCILOCK")) HalpPciLockSettings = TRUE;
+
+    /* Check for initial breakpoint */
+    if (strstr(CommandLine, "BREAK")) DbgBreakPoint();
+}
+
 /* FUNCTIONS *****************************************************************/
 #if 0
 VOID

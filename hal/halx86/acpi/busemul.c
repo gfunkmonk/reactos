@@ -14,7 +14,24 @@
 
 /* GLOBALS ********************************************************************/
 
+extern ULONG HalpShutdownContext;
+
 /* PRIVATE FUNCTIONS **********************************************************/
+
+VOID
+NTAPI
+HalpCheckPowerButton(VOID)
+{
+    if ((!KiBugCheckData[0] && !InbvCheckDisplayOwnership()) ||
+       !HalpShutdownContext)
+    {
+        return;
+    }
+
+    DPRINT1("HalpCheckPowerButton: FIXME (HalpFixedAcpiDescTable)\n");
+
+    return;
+}
 
 CODE_SEG("INIT")
 VOID
@@ -120,6 +137,22 @@ HalpFindBusAddressTranslation(IN PHYSICAL_ADDRESS BusAddress,
     *Context = 1;
     return TRUE;
 }
+
+#ifdef _M_IX86
+NTSTATUS
+NTAPI
+HalAcpiGetInterruptTranslator(_In_ INTERFACE_TYPE ParentInterfaceType,
+                              _In_ ULONG ParentBusNumber,
+                              _In_ INTERFACE_TYPE BridgeInterfaceType,
+                              _In_ USHORT Size,
+                              _In_ USHORT Version,
+                              _Out_ PTRANSLATOR_INTERFACE Translator,
+                              _Out_ PULONG BridgeBusNumber)
+{
+    ASSERT(FALSE);
+    return 0;
+}
+#endif
 
 /* PUBLIC FUNCTIONS **********************************************************/
 
