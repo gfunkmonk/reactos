@@ -1063,6 +1063,12 @@ USBH_FdoQueryBusRelations(IN PUSBHUB_FDO_EXTENSION HubExtension,
 
     if (!(HubExtension->HubFlags & USBHUB_FDO_FLAG_DO_ENUMERATION))
     {
+        LARGE_INTEGER Interval;
+        Status = STATUS_SUCCESS;
+        IoInvalidateDeviceRelations(HubExtension->LowerPDO, BusRelations);
+        Interval.QuadPart = -10000LL * 1000; // 1 sec.
+        KeDelayExecutionThread(KernelMode, FALSE, &Interval);
+
         DPRINT_ENUM("USBH_FdoQueryBusRelations: Skip enumeration\n");
         goto RelationsWorker;
     }
